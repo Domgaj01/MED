@@ -1,0 +1,27 @@
+{
+  "name": "med",
+  "version": "1.0.0",
+  "description": "Semester 1 Project",
+  "main": "index.js",
+  
+"scripts": {
+"dev": "npx @tailwindcss/cli -i ./css/input.css -o ./dist/output.css --watch",
+"build": "npx @tailwindcss/cli -i ./css/input.css -o ./dist/output.css --minify"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Domgaj01/MED.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Domgaj01/MED/issues"
+  },
+  "homepage": "https://github.com/Domgaj01/MED#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
+
