@@ -1,0 +1,119 @@
+LOGIN(
+    login_id PK,
+    username,
+    password,
+    role
+)
+
+CUSTOMERS(
+    customer_id PK,
+    login_id FK,
+    first_name,
+    last_name,
+    email,
+    phone
+)
+
+GENRES(
+    genre_id PK,
+    genre_name
+)
+
+MOVIES(
+    movie_id PK,
+    title,
+    description,
+    duration,
+    release_date,
+    age_rating
+)
+
+MOVIE_GENRES(
+    movie_id PK, FK,
+    genre_id PK, FK
+)
+
+HALLS(
+    hall_id PK,
+    hall_name,
+    capacity
+)
+
+SEATS(
+    seat_id PK,
+    hall_id FK,
+    row_number,
+    seat_number
+)
+
+SCREENINGS(
+    screening_id PK,
+    movie_id FK,
+    hall_id FK,
+    start_time,
+    end_time,
+    price,
+    screening_type
+)
+
+BOOKINGS(
+    booking_id PK,
+    customer_id FK,
+    screening_id FK,
+    booking_date,
+    status,
+    total_price
+)
+
+BOOKING_SEATS(
+    booking_id PK, FK,
+    seat_id PK, FK
+)
+
+ACTIVE_SEAT_RESERVATIONS(
+    screening_id PK, FK,
+    seat_id PK, FK,
+    booking_id FK,
+    reserved_at
+)
+
+MYSTERY_PREFERENCES(
+    preference_id PK,
+    customer_id FK,
+    genre_id FK,
+    created_at
+)
+
+MYSTERY_PREFERENCE_MOVIES(
+    preference_id PK, FK,
+    movie_id PK, FK
+)
+
+MYSTERY_GROUPS(
+    group_id PK,
+    screening_id FK,
+    selected_movie_id FK,
+    created_at
+)
+
+MYSTERY_GROUP_MEMBERS(
+    group_id PK, FK,
+    customer_id PK, FK
+)
+
+PAYMENTS(
+    payment_id PK,
+    booking_id FK,
+    amount,
+    payment_date,
+    payment_status,
+    payment_method
+)
+
+BOOKING_STATUS_HISTORY(
+    history_id PK,
+    booking_id FK,
+    old_status,
+    new_status,
+    changed_at
+)
