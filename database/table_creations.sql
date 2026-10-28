@@ -1,6 +1,7 @@
 CREATE TABLE GENRES (
     genre_id INT AUTO_INCREMENT PRIMARY KEY,
-    genre_name VARCHAR(100) NOT NULL UNIQUE
+    genre_name VARCHAR(100) NOT NULL UNIQUE,
+    genre_description TEXT NULL
 );
 
 CREATE TABLE MOVIES (
@@ -9,7 +10,11 @@ CREATE TABLE MOVIES (
     movie_description TEXT NULL,
     movie_duration INT NOT NULL,
     movie_release_date DATE NOT NULL,
-    movie_age_rating VARCHAR(10) NOT NULL
+    movie_age_rating VARCHAR(10) NOT NULL,
+    movie_language VARCHAR(50) NOT NULL,
+    movie_poster_url VARCHAR(255) NULL,
+    movie_is_available BOOLEAN NOT NULL DEFAULT TRUE,
+    movie_created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE MOVIE_GENRES (
