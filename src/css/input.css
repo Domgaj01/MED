@@ -8,6 +8,7 @@
 @source "../footer.php";
 @source "../login.php";
 @source "../create_user.php";
+@source "../manage_movies.php";
 
 .hero {
   background:

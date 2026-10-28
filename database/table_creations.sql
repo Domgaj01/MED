@@ -20,7 +20,7 @@ CREATE TABLE MOVIES (
 CREATE TABLE MOVIE_GENRES (
     movie_id INT NOT NULL,
     genre_id INT NOT NULL,
-    PRIMARY KEY (movie_id, genre_id), 
+    PRIMARY KEY (movie_id, genre_id),
     
     CONSTRAINT fk_movie_id FOREIGN KEY (movie_id) 
         REFERENCES MOVIES(movie_id) 
