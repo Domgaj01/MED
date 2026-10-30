@@ -22,3 +22,23 @@ when opened directly as a file in the browser.
 - `src/create_user.php` creates customer accounts with hashed passwords
 - `src/header.php` contains the shared document header and navigation
 - `src/footer.php` contains the footer
+
+## Admin page structure
+
+The genre and movie management pages use a small MVC-style structure so future
+CMS pages can follow the same pattern:
+
+- `src/manage_*.php` starts the session, connects to the database, creates the
+  page controller, and renders the HTML template.
+- `src/classes/*AdminController.php` handles request input, validation, and
+  page state.
+- `src/classes/*Manager.php` contains database queries and persistence logic.
+- `src/classes/AdminCsrfToken.php` provides one CSRF token for all admin forms
+  in the current session; render it as a hidden `csrf_token` input and validate
+  it before processing POST actions.
+- `src/classes/AdminPageController.php` contains behavior shared by admin
+  controllers, including HTML escaping and redirects.
+
+For another management page, add a manager for that page's database operations
+and an admin controller for its actions and validation. Keep the page file as
+the entry point and place its HTML in the page template.
