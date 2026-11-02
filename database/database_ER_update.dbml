@@ -1,0 +1,197 @@
+// ============================================
+// 3. HALLS AND SEATS
+// ============================================
+
+Table halls {
+  hall_id int [pk, increment]
+  hall_name varchar(50) [not null, unique]
+  is_mystery_hall boolean [not null, default: false]
+  is_active boolean [not null, default: true]
+  created_at datetime [not null]
+}
+
+Table seats {
+  seat_id int [pk, increment]
+  hall_id int [not null]
+  row_number varchar(5) [not null]
+  seat_number int [not null]
+  seat_type varchar(20) [not null, default: 'standard']
+  is_active boolean [not null, default: true]
+
+  indexes {
+    (hall_id, row_number, seat_number) [unique]
+    (seat_id, hall_id) [unique]
+  }
+}
+
+// ============================================
+// 9. ACTIVE SEAT RESERVATIONS
+// ============================================
+
+Table active_seat_reservations {
+  screening_id int [not null]
+  hall_id int [not null]
+  seat_id int [not null]
+  booking_id int [not null]
+  reserved_at datetime [not null]
+  expires_at datetime
+
+  indexes {
+    (screening_id, seat_id) [pk]
+    (booking_id, seat_id) [unique]
+    booking_id
+    expires_at
+  }
+}
+
+// ============================================
+// 4. SCREENINGS
+// ============================================
+
+Table screenings {
+  screening_id int [pk, increment]
+  movie_id int
+  hall_id int [not null]
+  start_time datetime [not null]
+  end_time datetime [not null]
+  screening_type varchar(20) [not null, default: 'regular']
+  status varchar(20) [not null, default: 'scheduled']
+  created_at datetime [not null]
+
+  indexes {
+    (status, start_time)
+    (hall_id, start_time, end_time)
+    (movie_id, start_time)
+  }
+}
+
+// ============================================
+// 7. BOOKINGS
+// ============================================
+
+Table bookings {
+  booking_id int [pk, increment]
+  customer_id int [not null]
+  screening_id int [not null]
+  booking_status varchar(20) [not null, default: 'pending']
+  booking_date datetime [not null]
+  total_amount decimal(8,2) [not null]
+  confirmed_at datetime
+  cancelled_at datetime
+
+  indexes {
+    (customer_id, booking_date)
+    (screening_id, booking_status)
+    (booking_id, screening_id) [unique]
+  }
+}
+
+// ============================================
+// 9. ACTIVE SEAT RESERVATIONS
+// ============================================
+
+Table active_seat_reservations {
+  screening_id int [not null]
+  hall_id int [not null]
+  seat_id int [not null]
+  booking_id int [not null]
+  reserved_at datetime [not null]
+  expires_at datetime
+
+  indexes {
+    (screening_id, seat_id) [pk]
+    (booking_id, seat_id) [unique]
+    booking_id
+    expires_at
+  }
+}
+
+// ============================================
+// CHANGES AFTER THIS
+// ============================================
+
+// ============================================
+// 8. BOOKING SEATS
+// ============================================
+
+Table booking_seats {
+  booking_seat_id int [pk, increment]
+  booking_id int [not null]
+  screening_id int [not null]
+  hall_id int [not null]
+  seat_id int [not null]
+  ticket_type_id int [not null]
+  seat_price decimal(8,2) [not null]
+
+  indexes {
+    (booking_id, seat_id) [unique]
+    (screening_id, seat_id)
+  }
+}
+
+// ============================================
+// 5. TICKET TYPES
+// ============================================
+
+Table ticket_types {
+  ticket_type_id int [pk, increment]
+  ticket_type_name varchar(50) [not null, unique]
+  min_age int
+  created_at datetime [not null]
+}
+
+// ============================================
+// 6. SCREENING TICKET PRICES
+// ============================================
+
+Table screening_ticket_prices {
+  screening_ticket_price_id int [pk, increment]
+  screening_id int [not null]
+  ticket_type_id int [not null]
+  ticket_price decimal(8,2) [not null]
+
+  indexes {
+    (screening_id, ticket_type_id) [unique]
+  }
+}
+
+// ============================================
+// RELATIONSHIPS
+// ============================================
+
+// HALLS AND SEATS
+Ref: seats.hall_id > halls.hall_id
+
+// SCREENINGS
+Ref: screenings.movie_id > movies.movie_id
+Ref: screenings.hall_id > halls.hall_id
+
+// TICKET TYPES AND PRICES
+Ref: screening_ticket_prices.screening_id > screenings.screening_id
+Ref: screening_ticket_prices.ticket_type_id > ticket_types.ticket_type_id
+
+// BOOKINGS
+Ref: bookings.customer_id > customers.customer_id
+Ref: bookings.screening_id > screenings.screening_id
+
+// BOOKING SEATS
+Ref: booking_seats.(booking_id, screening_id) >
+     bookings.(booking_id, screening_id)
+
+Ref: booking_seats.(screening_id, hall_id) >
+     screenings.(screening_id, hall_id)
+
+Ref: booking_seats.(seat_id, hall_id) >
+     seats.(seat_id, hall_id)
+
+Ref: booking_seats.ticket_type_id > ticket_types.ticket_type_id
+
+// ACTIVE SEAT RESERVATIONS
+Ref: active_seat_reservations.(booking_id, screening_id) >
+     bookings.(booking_id, screening_id)
+
+Ref: active_seat_reservations.(screening_id, hall_id) >
+     screenings.(screening_id, hall_id)
+
+Ref: active_seat_reservations.(seat_id, hall_id) >
+     seats.(seat_id, hall_id)
