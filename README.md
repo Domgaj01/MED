@@ -37,6 +37,9 @@ MVC-style
   it before processing POST actions.
 - `src/classes/AdminPageController.php` contains behavior shared by admin
   controllers, including HTML escaping and redirects.
+- `src/manage_screenings.php` and its screening controller/manager support
+  creating, editing, cancelling, and deleting screenings, including hall
+  conflict checks and per-screening ticket prices.
 
 ## Booking setup
 
