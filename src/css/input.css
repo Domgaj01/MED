@@ -10,6 +10,8 @@
 @source "../login.php";
 @source "../create_user.php";
 @source "../manage_movies.php";
+@source "../book-tickets.php";
+@source "../js/book-tickets.js";
 
 .hero {
   background:

@@ -4,7 +4,6 @@ require_once __DIR__ . "/parts/db.php";
 require_once __DIR__ . "/classes/AdminPageController.php";
 require_once __DIR__ . "/classes/GenreAdminController.php";
 
-// Keep this file as the page entry point; the controller prepares state and handles requests.
 $page = new GenreAdminController($conn, $_GET, $_POST, $_SERVER["REQUEST_METHOD"]);
 $message = $page->message;
 $error = $page->error;
@@ -123,3 +122,4 @@ $genres = $page->genres;
     });
 </script>
 <?php include __DIR__ . "/footer.php"; ?>
+ 

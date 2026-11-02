@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mystery Cinema</title>
     <link rel="stylesheet" href="/MED/src/css/colors.css">
-<link rel="stylesheet" href="/MED/src/css/fonts.css">
-<link rel="stylesheet" href="/MED/src/css/style.css">
+    <link rel="stylesheet" href="/MED/src/css/fonts.css">
+    <link rel="stylesheet" href="/MED/src/css/style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
 <style type="text/tailwindcss">
     @theme {
@@ -25,6 +25,7 @@
 </style>
 </head>
 <body class="m-0 min-h-screen min-w-[320px] bg-night font-lexend text-background">
+    <!-- shared site header used by all pages. -->
     <header class="grid min-h-[68px] grid-cols-[1fr_auto_1fr] items-center gap-6 border-b border-white/10 px-[clamp(20px,4vw,56px)] py-2.5 max-[850px]:grid-cols-[1fr_auto] max-[480px]:gap-3 max-[480px]:px-4">
         <a class="inline-flex w-fit focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-background" href="./index.php" aria-label="Mystery Cinema - home">
             <img class="block h-auto w-[106px] max-[480px]:w-[88px]" src="./pictures/mclogo.png" alt="Mystery Cinema">
@@ -39,6 +40,7 @@
         </nav>
 
         <div class="flex items-center justify-self-end gap-4 max-[480px]:gap-2.5">
+            <!-- show account actions based on whether a user is signed in. -->
             <?php if (logged_in()): ?>
                 <a class="whitespace-nowrap text-sm font-medium text-[#a6a6a6] transition-colors hover:text-background focus-visible:text-background focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-background max-[480px]:text-xs" href="./logout.php">Logout</a>
             <?php else: ?>

@@ -101,7 +101,7 @@ $conn->close();
                                     <span class="shrink-0 text-xs text-[#929292]"><?= date('Y', strtotime($movie['movie_release_date'])) ?></span>
                                 </div>
                                 <p class="mt-1 text-sm text-[#929292]"><?= htmlspecialchars(implode(' · ', $movieGenres)) ?> · <?= $hours ?>h <?= sprintf('%02d', $minutes) ?>m</p>
-                                <a class="mt-4 inline-flex text-sm font-semibold text-accent transition-colors hover:text-red-300" href="#book-tickets">View showtimes <span class="ml-1" aria-hidden="true">→</span></a>
+                                <a class="mt-4 inline-flex text-sm font-semibold text-accent transition-colors hover:text-red-300" href="book-tickets.php?movie_id=<?= (int) $movie['movie_id'] ?>">View showtimes <span class="ml-1" aria-hidden="true">→</span></a>
                             </div>
                         </article>
                     <?php endforeach; ?>

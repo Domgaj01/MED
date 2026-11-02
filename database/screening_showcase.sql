@@ -1,6 +1,3 @@
--- Run table_creations.sql first, then movies_showcase.sql, then this file.
--- These inserts are safe to run again: existing halls, seats, screenings, and prices are kept.
-
 INSERT INTO ticket_types (ticket_type_name, min_age)
 VALUES
     ('Adult', 18),
@@ -15,7 +12,6 @@ VALUES
     ('Hall 3', TRUE)
 ON DUPLICATE KEY UPDATE hall_name = VALUES(hall_name);
 
--- Set up 8 rows of 12 seats in each showcase hall.
 INSERT INTO seats (hall_id, `row_number`, seat_number)
 SELECT hall.hall_id, seat_rows.row_number, seat_numbers.seat_number
 FROM halls AS hall
@@ -42,8 +38,6 @@ WHERE hall.hall_name IN ('Hall 1', 'Hall 2', 'Hall 3')
         AND existing_seat.seat_number = seat_numbers.seat_number
   );
 
--- Fifteen screenings are spread over four dates, from three to six days ahead.
--- Each hall's showtimes leave enough time for the previous film to finish.
 INSERT INTO screenings (
     movie_id,
     hall_id,
@@ -105,8 +99,6 @@ WHERE movie.movie_is_available = 1
         )
   );
 
--- Set Adult/Child/Senior prices for each of the showcase screenings.
--- Child and Senior prices match the supplied design, and Adult is 115 DKK.
 INSERT INTO screening_ticket_prices (screening_id, ticket_type_id, ticket_price)
 SELECT
     screening.screening_id,
