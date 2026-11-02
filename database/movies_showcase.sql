@@ -43,3 +43,31 @@ INSERT INTO MOVIE_GENRES (movie_id, genre_id) VALUES
 (9, 3), (9, 8), (9, 10),
 -- Spirited Away (Animation, Fantasy, Adventure)
 (10, 9), (10, 7), (10, 4);
+
+INSERT INTO food_drinks_products
+(title, description, image_url, price, category, display_order)
+SELECT * FROM (
+    SELECT 'Classic Popcorn' AS title, 'Freshly popped, lightly salted cinema popcorn.' AS description,
+    'https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=900&q=85' AS image_url,
+    45.00 AS price, 'popcorn' AS category, 1 AS display_order
+    UNION ALL SELECT 'Caramel Popcorn', 'Sweet, crunchy popcorn with a rich caramel coating.',
+    'https://images.unsplash.com/photo-1585647347483-22b66260dfff?auto=format&fit=crop&w=900&q=85', 50.00, 'popcorn', 2
+    UNION ALL SELECT 'Nachos', 'Crispy tortilla chips served with warm cheese dip.',
+    'https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=900&q=85', 55.00, 'snacks', 1
+    UNION ALL SELECT 'Hot Dog', 'A classic cinema hot dog with your choice of sauce.',
+    'https://images.unsplash.com/photo-1612392062798-2dbaa8f8f4e4?auto=format&fit=crop&w=900&q=85', 60.00, 'snacks', 2
+    UNION ALL SELECT 'Candy Mix', 'A colourful mix of sweet cinema treats.',
+    'https://images.unsplash.com/photo-1582058091505-f87a2e55a71f?auto=format&fit=crop&w=900&q=85', 35.00, 'snacks', 3
+    UNION ALL SELECT 'Ice Cream', 'A cool and creamy treat for your movie night.',
+    'https://images.unsplash.com/phot   o-1563805042-7684c019e1cb?auto=format&fit=crop&w=900&q=85', 40.00, 'snacks', 4
+    UNION ALL SELECT 'Coca-Cola Large', 'Ice cold. The classic cinema drink.',
+    'https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=900&q=85', 40.00, 'drinks', 1
+    UNION ALL SELECT 'Fanta Orange', 'Cold, fizzy, and refreshing.',
+    'https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&w=900&q=85', 35.00, 'drinks', 2
+    UNION ALL SE    LECT 'Still Water', 'Cold still water, 50cl.',
+    'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=900&q=85', 20.00, 'drinks', 3
+) AS demo
+WHERE NOT EXISTS (
+    SELECT 1 FROM food_drinks_products existing
+    WHERE existing.title = demo.title AND existing.category = demo.category
+    );

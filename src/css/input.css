@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
+
 @import "tailwindcss";
 @import "./fonts.css";
 @import "./colors.css";
@@ -9,7 +10,6 @@
 @source "../login.php";
 @source "../create_user.php";
 @source "../manage_movies.php";
-@source "../manage_genres.php";
 
 .hero {
   background:

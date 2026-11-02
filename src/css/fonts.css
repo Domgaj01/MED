@@ -1,3 +1,9 @@
-@theme {
-  --font-lexend: "Lexend", sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
+
+:root {
+    --font-lexend: "Lexend", sans-serif;
+}
+
+body {
+    font-family: var(--font-lexend);
 }

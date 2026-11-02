@@ -42,3 +42,17 @@ CREATE TABLE users (
     last_login DATETIME NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS food_drinks_products (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description VARCHAR(255) NULL,
+    image_url VARCHAR(500) NULL,
+    price DECIMAL(8,2) NOT NULL,
+    category ENUM('popcorn', 'snacks', 'drinks') NOT NULL,
+    is_available TINYINT(1) NOT NULL DEFAULT 1,
+    display_order INT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_food_drinks_category_available_order
+        (category, is_available, display_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

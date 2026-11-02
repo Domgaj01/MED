@@ -5,7 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mystery Cinema</title>
-    <link href="./dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="/MED/src/css/colors.css">
+<link rel="stylesheet" href="/MED/src/css/fonts.css">
+<link rel="stylesheet" href="/MED/src/css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<style type="text/tailwindcss">
+    @theme {
+        --color-night: #0b0b0b;
+        --color-background: #f6f6f6;
+        --color-surface: #e8e8e8;
+        --color-charcoal: #333333;
+        --color-accent-dark: #990100;
+        --color-accent: #b90504;
+
+        --font-lexend: "Lexend", sans-serif;
+    }
+</style>
 </head>
 <body class="m-0 min-h-screen min-w-[320px] bg-night font-lexend text-background">
     <header class="grid min-h-[68px] grid-cols-[1fr_auto_1fr] items-center gap-6 border-b border-white/10 px-[clamp(20px,4vw,56px)] py-2.5 max-[850px]:grid-cols-[1fr_auto] max-[480px]:gap-3 max-[480px]:px-4">
