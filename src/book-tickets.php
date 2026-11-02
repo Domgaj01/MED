@@ -49,8 +49,10 @@ $movies = [];
 $screenings = [];
 $ticketPrices = [];
 $seats = [];
+$screeningCounts = [];
 $selectedScreening = null;
 $pageError = "";
+$scheduleAvailable = true;
 $schedule = new BookingScheduleManager($conn);
 
 try {
@@ -77,6 +79,11 @@ try {
     }
 
     if ($movieId !== null) {
+        $screeningCounts = $schedule->getScreeningCounts(
+            $movieId,
+            $bookingDays[0]->format("Y-m-d"),
+            $bookingDays[count($bookingDays) - 1]->format("Y-m-d")
+        );
         $screenings = $schedule->getScreenings($movieId, $selectedDate);
     }
 
@@ -99,6 +106,7 @@ try {
 } catch (mysqli_sql_exception $exception) {
     error_log("Booking schedule could not be loaded: " . $exception->getMessage());
     $pageError = "The booking schedule is not ready yet. Set up the booking tables and add screenings before taking bookings.";
+    $scheduleAvailable = false;
 }
 
 $seatsByRow = [];
@@ -145,14 +153,29 @@ $seatColumnCount = $seatsByRow === []
                 <h2 class="flex items-center gap-2 text-sm font-extrabold uppercase tracking-wide" id="booking-date-title"><span class="text-red-500" aria-hidden="true">▦</span> Select date</h2>
                 <div class="mt-4 grid grid-cols-2 gap-2">
                     <?php foreach ($bookingDays as $bookingDay): ?>
-                        <?php $dayDate = $bookingDay->format("Y-m-d"); ?>
+                        <?php
+                        $dayDate = $bookingDay->format("Y-m-d");
+                        $dayScreeningCount = $screeningCounts[$dayDate] ?? 0;
+                        ?>
                         <a
-                            class="grid min-h-14 place-content-center gap-0.5 rounded-xl border border-white/[0.04] bg-[#242424] text-center text-sm text-[#a6a6a6] transition hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400<?= $dayDate === $selectedDate ? " border-accent bg-accent font-semibold text-white" : "" ?>"
+                            class="grid min-h-[76px] place-content-center gap-0.5 rounded-xl border border-white/[0.04] bg-[#242424] text-center text-sm text-[#a6a6a6] transition hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400<?= $dayDate === $selectedDate ? " border-accent bg-accent font-semibold text-white" : "" ?><?= $scheduleAvailable && $dayScreeningCount === 0 ? " opacity-70" : "" ?>"
                             href="<?= $escape($bookingUrl(["date" => $dayDate, "screening_id" => null])) ?>"
                             <?= $dayDate === $selectedDate ? 'aria-current="date"' : "" ?>
                         >
                             <span><?= $escape($bookingDay->format("D")) ?></span>
                             <span><?= $escape($bookingDay->format("d M")) ?></span>
+                            <span class="mt-1 flex items-center justify-center gap-1.5 text-[11px] font-medium leading-none <?= !$scheduleAvailable ? "text-[#b7b7b7]" : ($dayScreeningCount > 0 ? "text-emerald-300" : "text-[#929292]") ?>">
+                                <span class="h-1.5 w-1.5 rounded-full <?= !$scheduleAvailable ? "bg-[#777]" : ($dayScreeningCount > 0 ? "bg-emerald-400" : "bg-[#777]") ?>" aria-hidden="true"></span>
+                                <?php if (!$scheduleAvailable): ?>
+                                    Schedule unavailable
+                                <?php elseif ($movieId === null): ?>
+                                    Select a movie
+                                <?php elseif ($dayScreeningCount > 0): ?>
+                                    <?= $dayScreeningCount ?> <?= $dayScreeningCount === 1 ? "showtime" : "showtimes" ?>
+                                <?php else: ?>
+                                    No screenings
+                                <?php endif; ?>
+                            </span>
                         </a>
                     <?php endforeach; ?>
                 </div>

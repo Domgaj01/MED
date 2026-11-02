@@ -78,6 +78,37 @@ class BookingScheduleManager
         return $screenings;
     }
 
+    public function getScreeningCounts(int $movieId, string $startDate, string $endDate): array
+    {
+        // count future scheduled screenings for each date in the requested range
+        $startOfRange = $startDate . " 00:00:00";
+        $endOfRange = (new DateTimeImmutable($endDate))
+            ->modify("+1 day")
+            ->format("Y-m-d H:i:s");
+        $statement = $this->connection->prepare(
+            "SELECT DATE(s.start_time) AS screening_date, COUNT(*) AS screening_count
+             FROM screenings AS s
+             INNER JOIN halls AS h ON h.hall_id = s.hall_id
+             WHERE s.movie_id = ?
+               AND s.status = 'scheduled'
+               AND h.is_active = 1
+               AND s.start_time >= ?
+               AND s.start_time < ?
+               AND s.start_time >= CURRENT_TIMESTAMP
+             GROUP BY DATE(s.start_time)"
+        );
+        $statement->bind_param("iss", $movieId, $startOfRange, $endOfRange);
+        $statement->execute();
+        $result = $statement->get_result();
+        $counts = [];
+        while ($row = $result->fetch_assoc()) {
+            $counts[$row["screening_date"]] = (int) $row["screening_count"];
+        }
+        $statement->close();
+
+        return $counts;
+    }
+
     public function findScreening(int $screeningId, int $movieId, string $date): ?array
     {
         // find a specific screening by ID, movie, and date, ensuring it is still scheduled and has not started yet
