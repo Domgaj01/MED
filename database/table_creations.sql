@@ -192,3 +192,69 @@ CREATE TABLE IF NOT EXISTS food_drinks_products (
     INDEX idx_food_drinks_category_available_order
         (category, is_available, display_order)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE mystery_preferences (
+    preference_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    booking_id INT NOT NULL,
+    genre_id INT NOT NULL,
+
+    favorite_movie_1_id INT NOT NULL,
+    favorite_movie_2_id INT NOT NULL,
+    favorite_movie_3_id INT NOT NULL,
+
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_mystery_preferences_booking
+        FOREIGN KEY (booking_id)
+        REFERENCES bookings(booking_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_mystery_preferences_genre
+        FOREIGN KEY (genre_id)
+        REFERENCES GENRES(genre_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_mystery_preferences_movie_1
+        FOREIGN KEY (favorite_movie_1_id)
+        REFERENCES MOVIES(movie_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_mystery_preferences_movie_2
+        FOREIGN KEY (favorite_movie_2_id)
+        REFERENCES MOVIES(movie_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_mystery_preferences_movie_3
+        FOREIGN KEY (favorite_movie_3_id)
+        REFERENCES MOVIES(movie_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    UNIQUE KEY uq_mystery_preferences_booking (booking_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE mystery_preference_genres (
+    preference_id INT NOT NULL,
+    genre_id INT NOT NULL,
+
+    PRIMARY KEY (preference_id, genre_id),
+
+    FOREIGN KEY (preference_id)
+        REFERENCES mystery_preferences(preference_id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (genre_id)
+        REFERENCES GENRES(genre_id)
+        ON DELETE CASCADE
+);
+
+ALTER TABLE mystery_preferences
+DROP FOREIGN KEY fk_mystery_preferences_genre;
+
+ALTER TABLE mystery_preferences
+DROP COLUMN genre_id;
