@@ -93,7 +93,7 @@ class MysteryCinemaController extends AdminPageController
 
         $this->selectedGenreIds = $validGenreIds;
 
-        $this->message = "Žánre boli úspešne uložené.";
+        $this->message = "Your favourite genres have been saved successfully.";
     }
 
     public function getGenres(): array
