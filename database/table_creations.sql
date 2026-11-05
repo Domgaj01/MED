@@ -2,7 +2,7 @@ CREATE TABLE GENRES (
     genre_id INT AUTO_INCREMENT PRIMARY KEY,
     genre_name VARCHAR(100) NOT NULL UNIQUE,
     genre_description TEXT NULL
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE MOVIES (
     movie_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,7 +15,7 @@ CREATE TABLE MOVIES (
     movie_poster_url VARCHAR(255) NULL,
     movie_is_available BOOLEAN NOT NULL DEFAULT TRUE,
     movie_created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE MOVIE_GENRES (
     movie_id INT NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE MOVIE_GENRES (
         REFERENCES GENRES(genre_id) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -41,7 +41,7 @@ CREATE TABLE users (
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     last_login DATETIME NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE halls (
     hall_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -49,7 +49,7 @@ CREATE TABLE halls (
     is_mystery_hall BOOLEAN NOT NULL DEFAULT FALSE,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE seats (
     seat_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -63,7 +63,7 @@ CREATE TABLE seats (
     CONSTRAINT fk_seats_hall
         FOREIGN KEY (hall_id) REFERENCES halls(hall_id)
         ON DELETE CASCADE ON UPDATE CASCADE
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE screenings (
     screening_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -84,14 +84,14 @@ CREATE TABLE screenings (
     CONSTRAINT fk_screenings_hall
         FOREIGN KEY (hall_id) REFERENCES halls(hall_id)
         ON DELETE RESTRICT ON UPDATE CASCADE
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE ticket_types (
     ticket_type_id INT AUTO_INCREMENT PRIMARY KEY,
     ticket_type_name VARCHAR(50) NOT NULL UNIQUE,
     min_age INT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE screening_ticket_prices (
     screening_ticket_price_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -105,7 +105,7 @@ CREATE TABLE screening_ticket_prices (
     CONSTRAINT fk_screening_ticket_prices_type
         FOREIGN KEY (ticket_type_id) REFERENCES ticket_types(ticket_type_id)
         ON DELETE RESTRICT ON UPDATE CASCADE
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE bookings (
     booking_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -125,7 +125,7 @@ CREATE TABLE bookings (
     CONSTRAINT fk_bookings_screening
         FOREIGN KEY (screening_id) REFERENCES screenings(screening_id)
         ON DELETE RESTRICT ON UPDATE CASCADE
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE booking_seats (
     booking_seat_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -152,7 +152,7 @@ CREATE TABLE booking_seats (
     CONSTRAINT fk_booking_seats_ticket_type
         FOREIGN KEY (ticket_type_id) REFERENCES ticket_types(ticket_type_id)
         ON DELETE RESTRICT ON UPDATE CASCADE
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE active_seat_reservations (
     screening_id INT NOT NULL,
@@ -177,7 +177,7 @@ CREATE TABLE active_seat_reservations (
         FOREIGN KEY (seat_id, hall_id)
         REFERENCES seats(seat_id, hall_id)
         ON DELETE RESTRICT ON UPDATE CASCADE
-);
+)engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS food_drinks_products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -253,8 +253,28 @@ CREATE TABLE mystery_preference_genres (
         ON DELETE CASCADE
 );
 
-ALTER TABLE mystery_preferences
-DROP FOREIGN KEY fk_mystery_preferences_genre;
+CREATE TABLE site_settings (
+    settings_id TINYINT UNSIGNED NOT NULL PRIMARY KEY,
+    company_description TEXT NOT NULL,
+    contact_address VARCHAR(255) NOT NULL DEFAULT '',
+    contact_phone VARCHAR(50) NOT NULL DEFAULT '',
+    contact_email VARCHAR(254) NOT NULL DEFAULT '',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-ALTER TABLE mystery_preferences
-DROP COLUMN genre_id;
+CREATE TABLE site_opening_hours (
+    day_of_week TINYINT UNSIGNED NOT NULL PRIMARY KEY,
+    opens_at TIME NULL,
+    closes_at TIME NULL,
+    is_closed TINYINT(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE news_articles (
+    news_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    body TEXT NOT NULL,
+    is_published TINYINT(1) NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_news_published_created (is_published, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
