@@ -27,8 +27,11 @@ when opened directly as a file in the browser.
 
 MVC-style
 
-- `src/manage_*.php` starts the session, connects to the database, creates the
-  page controller, and renders the HTML template
+- `src/parts/admin_auth.php` verifies the signed-in user and checks the current
+  database role and active status before admin pages run
+- `src/admin_header.php` displays navigation for the admin pages
+- `src/manage_*.php` checks admin access before creating the page controller
+  and rendering the HTML template
 - `src/classes/*AdminController.php` handles request input, validation, and
   page state.
 - `src/classes/*Manager.php` contains database queries and persistence logic.
@@ -37,10 +40,7 @@ MVC-style
   it before processing POST actions.
 - `src/classes/AdminPageController.php` contains behavior shared by admin
   controllers, including HTML escaping and redirects.
-- `src/manage_screenings.php` and its screening controller/manager support
-  creating, editing, cancelling, and deleting screenings, including hall
-  conflict checks and per-screening ticket prices.
-
+  
 ## Booking setup
 
 `src/book-tickets.php` loads showtimes, ticket prices, seat layouts, and current

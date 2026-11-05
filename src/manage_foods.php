@@ -1,7 +1,7 @@
 
 <?php
 
-require_once __DIR__ . "/parts/session.php";
+require_once __DIR__ . "/parts/admin_auth.php";
 require_once __DIR__ . "/parts/db.php";
 require_once __DIR__ . "/classes/AdminPageController.php";
 require_once __DIR__ . "/classes/FoodAdminController.php";

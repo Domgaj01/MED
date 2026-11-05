@@ -1,4 +1,12 @@
-<?php require_once __DIR__ . "/parts/session.php"; ?>
+<?php
+require_once __DIR__ . "/parts/session.php";
+$isAdmin = false;
+if (logged_in()) {
+    require_once __DIR__ . "/parts/db.php";
+    require_once __DIR__ . "/parts/admin_access.php";
+    $isAdmin = current_user_is_admin($conn);
+}
+?>
 <!DOCTYPE html>
 <html lang="sk">
 <head>
@@ -49,3 +57,23 @@
             <a class="whitespace-nowrap rounded-[10px] bg-accent px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-accent-dark focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-background max-[480px]:px-3 max-[480px]:py-[9px] max-[480px]:text-xs" href="./book-tickets.php">Book Tickets</a>
         </div>
     </header>
+    <?php if ($isAdmin): ?>
+        <?php $currentAdminPage = basename($_SERVER["SCRIPT_NAME"] ?? ""); ?>
+        <nav class="border-b border-white/10 bg-[#151515] px-6 py-3" aria-label="Admin pages">
+            <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3">
+                <span class="text-xs font-bold uppercase tracking-[0.16em] text-[#ef5552]">Admin</span>
+                <?php foreach ([
+                    "manage_movies.php" => "Movies",
+                    "manage_genres.php" => "Genres",
+                    "manage_screenings.php" => "Screenings",
+                    "manage_foods.php" => "Food &amp; drinks",
+                ] as $adminPage => $label): ?>
+                    <a
+                        class="text-sm font-semibold text-white/65 transition-colors hover:text-white"
+                        href="<?= htmlspecialchars($adminPage, ENT_QUOTES, "UTF-8") ?>"
+                        <?= $currentAdminPage === $adminPage ? 'aria-current="page"' : "" ?>
+                    ><?= $label ?></a>
+                <?php endforeach; ?>
+            </div>
+        </nav>
+    <?php endif; ?>
