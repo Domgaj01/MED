@@ -10,10 +10,6 @@ $error = $page->error;
 $csrfToken = $page->csrfToken;
 $settings = $page->settings;
 $openingHours = $page->openingHours;
-$news = $page->news;
-$selectedNews = $page->selectedNews;
-$selectedNewsId = $page->selectedNewsId;
-$isCreatingNews = $page->isCreatingNews;
 $days = [
     1 => "Monday",
     2 => "Tuesday",
@@ -29,7 +25,7 @@ $days = [
 <main class="mx-auto min-h-[650px] max-w-5xl space-y-14 px-6 py-12">
     <div>
         <h1 class="text-3xl font-bold">Manage website content</h1>
-        <p class="mt-2 text-sm text-white/60">Update company information and publish news. Movies and screenings are managed in their own admin pages.</p>
+        <p class="mt-2 text-sm text-white/60">Update the company information, contact details, and opening hours shown throughout the website.</p>
     </div>
 
     <?php if ($message !== ""): ?>
@@ -97,70 +93,6 @@ $days = [
         </form>
     </section>
 
-    <section id="news" aria-labelledby="news-title">
-        <div class="flex flex-wrap items-end justify-between gap-4">
-            <div>
-                <h2 class="text-2xl font-bold" id="news-title">News</h2>
-                <p class="mt-2 text-sm text-white/60">Published articles appear on the home page. Drafts remain visible only here.</p>
-            </div>
-            <a class="inline-flex rounded-lg bg-accent px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-accent-dark" href="manage_site.php?create_news=1#news">Create news article</a>
-        </div>
-
-        <?php if ($selectedNews !== null): ?>
-            <form action="manage_site.php#news" method="post" class="mt-6 space-y-5 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-                <input type="hidden" name="csrf_token" value="<?= AdminPageController::escape($csrfToken) ?>">
-                <input type="hidden" name="action" value="<?= $isCreatingNews ? "create_news" : "update_news" ?>">
-                <?php if (!$isCreatingNews): ?>
-                    <input type="hidden" name="news_id" value="<?= (int) $selectedNewsId ?>">
-                <?php endif; ?>
-
-                <h3 class="text-lg font-semibold"><?= $isCreatingNews ? "Create article" : "Edit article" ?></h3>
-                <label class="block text-sm font-medium" for="news-title">
-                    Title
-                    <input class="mt-2 h-12 w-full rounded-lg border border-white/15 bg-[#1a1a1a] px-3 text-background" id="news-title" name="title" maxlength="200" value="<?= AdminPageController::escape($selectedNews["title"]) ?>" required>
-                </label>
-                <label class="block text-sm font-medium" for="news-body">
-                    Article text
-                    <textarea class="mt-2 min-h-48 w-full rounded-lg border border-white/15 bg-[#1a1a1a] p-3 text-background" id="news-body" name="body" maxlength="60000" required><?= AdminPageController::escape($selectedNews["body"]) ?></textarea>
-                </label>
-                <label class="inline-flex items-center gap-2 text-sm">
-                    <input type="checkbox" name="is_published" value="1" <?= (int) $selectedNews["is_published"] === 1 ? "checked" : "" ?>>
-                    Publish on the home page
-                </label>
-                <div class="flex flex-wrap gap-3">
-                    <button class="rounded-lg bg-accent px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-accent-dark" type="submit"><?= $isCreatingNews ? "Create article" : "Save article" ?></button>
-                    <a class="rounded-lg border border-white/15 px-6 py-3 text-sm font-semibold hover:bg-white/5" href="manage_site.php#news">Cancel</a>
-                </div>
-            </form>
-        <?php endif; ?>
-
-        <?php if ($news === []): ?>
-            <p class="mt-6 rounded-xl border border-white/10 p-5 text-sm text-white/60">No news articles have been created yet.</p>
-        <?php else: ?>
-            <ul class="mt-6 space-y-3">
-                <?php foreach ($news as $article): ?>
-                    <li class="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                        <div class="min-w-0">
-                            <h3 class="font-semibold"><?= AdminPageController::escape($article["title"]) ?></h3>
-                            <p class="mt-1 text-xs text-white/50">
-                                <?= (int) $article["is_published"] === 1 ? "Published" : "Draft" ?>
-                                · <?= AdminPageController::escape(date("d M Y", strtotime($article["created_at"]))) ?>
-                            </p>
-                        </div>
-                        <div class="flex shrink-0 gap-2">
-                            <a class="rounded-lg border border-white/15 px-4 py-2 text-sm font-semibold hover:bg-white/5" href="manage_site.php?news_id=<?= (int) $article["news_id"] ?>#news">Edit</a>
-                            <form action="manage_site.php#news" method="post" onsubmit="return confirm('Delete this news article?');">
-                                <input type="hidden" name="csrf_token" value="<?= AdminPageController::escape($csrfToken) ?>">
-                                <input type="hidden" name="action" value="delete_news">
-                                <input type="hidden" name="news_id" value="<?= (int) $article["news_id"] ?>">
-                                <button class="rounded-lg border border-red-400/40 px-4 py-2 text-sm font-semibold text-red-200 hover:bg-red-400/10" type="submit">Delete</button>
-                            </form>
-                        </div>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
-    </section>
 </main>
 
 <?php include __DIR__ . "/footer.php"; ?>

@@ -7,10 +7,6 @@ class SiteContentAdminController extends AdminPageController
 {
     public array $settings = [];
     public array $openingHours = [];
-    public array $news = [];
-    public ?array $selectedNews = null;
-    public ?int $selectedNewsId = null;
-    public bool $isCreatingNews = false;
 
     private SiteContentManager $contentManager;
 
@@ -29,8 +25,6 @@ class SiteContentAdminController extends AdminPageController
         parent::__construct($connection);
 
         $this->contentManager = new SiteContentManager($connection);
-        $this->selectedNewsId = $this->positiveInteger($query["news_id"] ?? null);
-        $this->isCreatingNews = ($query["create_news"] ?? "") === "1";
 
         if ($requestMethod === "POST") {
             $this->handlePost($post);
@@ -43,22 +37,6 @@ class SiteContentAdminController extends AdminPageController
         $this->openingHours = $this->openingHours !== []
             ? $this->openingHours
             : $this->contentManager->getOpeningHours();
-        $this->news = $this->contentManager->getNews();
-
-        if ($this->selectedNewsId !== null && $this->selectedNews === null) {
-            $this->selectedNews = $this->contentManager->findNewsById($this->selectedNewsId);
-            if ($this->selectedNews === null && $this->error === "") {
-                $this->error = "That news article could not be found.";
-            }
-        }
-
-        if ($this->isCreatingNews && $this->selectedNews === null) {
-            $this->selectedNews = [
-                "title" => "",
-                "body" => "",
-                "is_published" => 0,
-            ];
-        }
     }
 
     private function handlePost(array $post): void
@@ -76,18 +54,8 @@ class SiteContentAdminController extends AdminPageController
             return;
         }
 
-        if ($action === "delete_news") {
-            $this->deleteNews($post);
-            return;
-        }
-
-        if ($action === "create_news" || $action === "update_news") {
-            $this->saveNews($post, $action === "create_news");
-            return;
-        }
-
         http_response_code(400);
-        $this->error = "Invalid content action.";
+        $this->error = "Invalid website content action.";
     }
 
     private function saveSiteContent(array $post): void
@@ -174,64 +142,6 @@ class SiteContentAdminController extends AdminPageController
         return $openingHours;
     }
 
-    private function saveNews(array $post, bool $isCreating): void
-    {
-        $newsId = $isCreating
-            ? null
-            : $this->positiveInteger($post["news_id"] ?? null);
-        $article = [
-            "title" => $this->postedString($post, "title"),
-            "body" => $this->postedString($post, "body"),
-            "is_published" => isset($post["is_published"]) && $post["is_published"] === "1" ? 1 : 0,
-        ];
-        $this->isCreatingNews = $isCreating;
-        $this->selectedNewsId = $newsId;
-        $this->selectedNews = $article;
-
-        if (!$isCreating && $newsId === null) {
-            $this->error = "Choose a valid news article to edit.";
-        } elseif ($article["title"] === "" || mb_strlen($article["title"], "UTF-8") > 200) {
-            $this->error = "Title is required and must be no more than 200 characters.";
-        } elseif ($article["body"] === "" || mb_strlen($article["body"], "UTF-8") > 60000) {
-            $this->error = "Article text is required and must be no more than 60,000 characters.";
-        } else {
-            try {
-                $this->selectedNewsId = $this->contentManager->saveNews(
-                    $article,
-                    $newsId
-                );
-                $parameter = $isCreating ? "created=1" : "news_saved=1";
-                $this->redirectTo(
-                    "manage_site.php?news_id=" . $this->selectedNewsId . "&" . $parameter . "#news"
-                );
-            } catch (DomainException $exception) {
-                $this->error = $exception->getMessage();
-            } catch (mysqli_sql_exception $exception) {
-                error_log("News save failed: " . $exception->getMessage());
-                $this->error = "Could not save the news article. Check the server log for details.";
-            }
-        }
-    }
-
-    private function deleteNews(array $post): void
-    {
-        $newsId = $this->positiveInteger($post["news_id"] ?? null);
-        if ($newsId === null) {
-            $this->error = "Choose a valid news article to delete.";
-            return;
-        }
-
-        try {
-            if ($this->contentManager->deleteNews($newsId)) {
-                $this->redirectTo("manage_site.php?deleted=1#news");
-            }
-            $this->error = "That news article could not be found.";
-        } catch (mysqli_sql_exception $exception) {
-            error_log("News deletion failed: " . $exception->getMessage());
-            $this->error = "Could not delete the news article. Check the server log for details.";
-        }
-    }
-
     private function postedString(array $post, string $key): string
     {
         return isset($post[$key]) && is_string($post[$key])
@@ -243,12 +153,6 @@ class SiteContentAdminController extends AdminPageController
     {
         if (isset($query["saved"])) {
             $this->message = "Company information and opening hours saved.";
-        } elseif (isset($query["created"])) {
-            $this->message = "News article created.";
-        } elseif (isset($query["news_saved"])) {
-            $this->message = "News article changes saved.";
-        } elseif (isset($query["deleted"])) {
-            $this->message = "News article deleted.";
         }
     }
 }

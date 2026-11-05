@@ -29,9 +29,12 @@ MVC-style
 
 - `src/parts/admin_auth.php` verifies the signed-in user and checks the current
   database role and active status before admin pages run
-- `src/admin_header.php` displays navigation for the admin pages
+- `src/header.php` displays navigation for signed-in administrators
 - `src/manage_*.php` checks admin access before creating the page controller
   and rendering the HTML template
+- `src/manage_site.php` edits general company information and opening hours
+- `src/manage_news.php` provides separate create, edit, publish, and delete
+  actions for news articles
 - `src/classes/*AdminController.php` handles request input, validation, and
   page state.
 - `src/classes/*Manager.php` contains database queries and persistence logic.

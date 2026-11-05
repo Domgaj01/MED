@@ -35,7 +35,6 @@ while ($row = $result->fetch_assoc()) {
 ksort($genres);
 
 $result->free();
-$conn->close();
 ?>
 <?php include __DIR__ . '/header.php'; ?>
 

@@ -68,6 +68,7 @@ if (logged_in()) {
                     "manage_screenings.php" => "Screenings",
                     "manage_foods.php" => "Food &amp; drinks",
                     "manage_site.php" => "Website content",
+                    "manage_news.php" => "News",
                 ] as $adminPage => $label): ?>
                     <a
                         class="text-sm font-semibold text-white/65 transition-colors hover:text-white"
