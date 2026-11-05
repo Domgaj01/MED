@@ -1,3 +1,20 @@
+    <?php
+    require_once __DIR__ . "/parts/db.php";
+    require_once __DIR__ . "/classes/SiteContentManager.php";
+    $footerContentManager = new SiteContentManager($conn);
+    $footerSettings = $footerContentManager->getSettings();
+    $footerOpeningHours = $footerContentManager->getOpeningHours();
+    $footerDayNames = [
+        1 => "Monday",
+        2 => "Tuesday",
+        3 => "Wednesday",
+        4 => "Thursday",
+        5 => "Friday",
+        6 => "Saturday",
+        7 => "Sunday",
+    ];
+    $footerPhoneLink = preg_replace('/[^0-9+]/', '', $footerSettings["contact_phone"]);
+    ?>
     <footer class="border-t border-white/10 bg-[#191919]">
         <div class="mx-auto grid max-w-[1440px] grid-cols-4 gap-12 px-[clamp(24px,4vw,56px)] py-14 max-[900px]:grid-cols-2 max-[900px]:gap-x-8 max-[900px]:gap-y-10 max-[480px]:grid-cols-1 max-[480px]:gap-8 max-[480px]:py-10">
             <div>
@@ -27,20 +44,44 @@
                         <li><a class="transition-colors hover:text-background" href="./login.php">Login</a></li>
                     <?php endif; ?>
                     <li><a class="transition-colors hover:text-background" href="./profile.php">My Profile</a></li>
-                    <li><a class="transition-colors hover:text-background" href="mailto:hej@mysterycinema.dk">Contact Us</a></li>
+                    <li>
+                        <?php if ($footerSettings["contact_email"] !== ""): ?>
+                            <a class="transition-colors hover:text-background" href="mailto:<?= htmlspecialchars($footerSettings["contact_email"], ENT_QUOTES, "UTF-8") ?>">Contact Us</a>
+                        <?php else: ?>
+                            <span>Contact Us</span>
+                        <?php endif; ?>
+                    </li>
                 </ul>
             </nav>
 
             <div>
                 <h2 class="mb-5 text-sm font-bold uppercase tracking-[0.08em] text-background">Visit us</h2>
                 <address class="space-y-3 text-sm not-italic leading-6 text-[#a6a6a6]">
-                    <p>Filmstræde 12<br>1234 Copenhagen</p>
-                    <p><a class="transition-colors hover:text-background" href="tel:+4570123456">+45 70 12 34 56</a></p>
-                    <p><a class="transition-colors hover:text-background" href="mailto:hej@mysterycinema.dk">hej@mysterycinema.dk</a></p>
+                    <?php if ($footerSettings["contact_address"] !== ""): ?>
+                        <p><?= nl2br(htmlspecialchars($footerSettings["contact_address"], ENT_QUOTES, "UTF-8")) ?></p>
+                    <?php endif; ?>
+                    <?php if ($footerSettings["contact_phone"] !== ""): ?>
+                        <p><a class="transition-colors hover:text-background" href="tel:<?= htmlspecialchars($footerPhoneLink, ENT_QUOTES, "UTF-8") ?>"><?= htmlspecialchars($footerSettings["contact_phone"], ENT_QUOTES, "UTF-8") ?></a></p>
+                    <?php endif; ?>
+                    <?php if ($footerSettings["contact_email"] !== ""): ?>
+                        <p><a class="transition-colors hover:text-background" href="mailto:<?= htmlspecialchars($footerSettings["contact_email"], ENT_QUOTES, "UTF-8") ?>"><?= htmlspecialchars($footerSettings["contact_email"], ENT_QUOTES, "UTF-8") ?></a></p>
+                    <?php endif; ?>
                 </address>
 
                 <h3 class="mb-2 mt-6 text-sm font-bold uppercase tracking-[0.08em] text-background">Opening hours</h3>
-                <p class="text-sm leading-6 text-[#a6a6a6]">Mon–Thu: 13:00–23:00<br>Fri–Sun: 12:00–01:00</p>
+                <ul class="space-y-1 text-sm leading-6 text-[#a6a6a6]">
+                    <?php foreach ($footerDayNames as $day => $dayName): ?>
+                        <?php $dayHours = $footerOpeningHours[$day] ?? null; ?>
+                        <li>
+                            <?= htmlspecialchars($dayName, ENT_QUOTES, "UTF-8") ?>:
+                            <?php if ($dayHours === null || (int) $dayHours["is_closed"] === 1): ?>
+                                Closed
+                            <?php else: ?>
+                                <?= htmlspecialchars(substr($dayHours["opens_at"], 0, 5), ENT_QUOTES, "UTF-8") ?>–<?= htmlspecialchars(substr($dayHours["closes_at"], 0, 5), ENT_QUOTES, "UTF-8") ?>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
         </div>
 

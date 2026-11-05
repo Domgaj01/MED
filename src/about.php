@@ -1,5 +1,11 @@
 
-<?php include __DIR__ . '/header.php'; ?>
+<?php
+require_once __DIR__ . "/parts/db.php";
+require_once __DIR__ . "/classes/AdminPageController.php";
+require_once __DIR__ . "/classes/SiteContentManager.php";
+$siteSettings = (new SiteContentManager($conn))->getSettings();
+include __DIR__ . '/header.php';
+?>
 
 <main>
 
@@ -19,7 +25,7 @@
             </h1>
 
             <p class="mt-7 max-w-[760px] text-[clamp(1rem,1.55vw,1.375rem)] leading-[1.65] text-[#dedada] max-[480px]:mt-5">
-                We wanted to create a different kind of cinema experience.
+                Discover a cinema experience shaped around great films and the joy of surprise.
             </p>
 
         </div>
@@ -40,15 +46,7 @@
             </h2>
 
             <p class="mt-7 text-base leading-[1.8] text-[#dedada]">
-                We wanted to create a different kind of cinema experience.
-                Instead of spending forever deciding what to watch, what if
-                the cinema could make the choice for you?
-            </p>
-
-            <p class="mt-5 text-base leading-[1.8] text-[#dedada]">
-                That idea became Mystery Cinema. A place where you can
-                book a film the normal way — or hand over control, trust
-                the process, and let the surprise be part of the experience.
+                <?= nl2br(AdminPageController::escape($siteSettings["company_description"])) ?>
             </p>
 
         </div>
