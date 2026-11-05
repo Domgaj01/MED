@@ -67,6 +67,7 @@ if (logged_in()) {
                     "manage_genres.php" => "Genres",
                     "manage_screenings.php" => "Screenings",
                     "manage_foods.php" => "Food &amp; drinks",
+                    "manage_site.php" => "Website content",
                 ] as $adminPage => $label): ?>
                     <a
                         class="text-sm font-semibold text-white/65 transition-colors hover:text-white"
