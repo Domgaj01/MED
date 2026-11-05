@@ -23,8 +23,8 @@ $bookingUrl = static function (array $changes): string {
 
 $today = new DateTimeImmutable("today");
 $bookingDays = [];
-// show the next six days
-for ($dayOffset = 1; $dayOffset <= 6; $dayOffset++) {
+// show today and the next six days
+for ($dayOffset = 0; $dayOffset <= 6; $dayOffset++) {
     $bookingDays[] = $today->modify("+{$dayOffset} days");
 }
 
