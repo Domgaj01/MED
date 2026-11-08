@@ -64,7 +64,7 @@ SELECT * FROM (
     'https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=900&q=85', 40.00, 'drinks', 1
     UNION ALL SELECT 'Fanta Orange', 'Cold, fizzy, and refreshing.',
     'https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&w=900&q=85', 35.00, 'drinks', 2
-    UNION ALL SE    LECT 'Still Water', 'Cold still water, 50cl.',
+    UNION ALL SELECT 'Still Water', 'Cold still water, 50cl.',
     'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=900&q=85', 20.00, 'drinks', 3
 ) AS demo
 WHERE NOT EXISTS (

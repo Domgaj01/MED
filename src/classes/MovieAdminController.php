@@ -134,7 +134,7 @@ class MovieAdminController extends AdminPageController
         return isset($post[$key]) && is_string($post[$key]) ? trim($post[$key]) : "";
     }
 
-    private function getPostedGenreIds(mixed $postedGenreIds): array
+    private function getPostedGenreIds($postedGenreIds): array
     {
         if (!is_array($postedGenreIds)) {
             return [];

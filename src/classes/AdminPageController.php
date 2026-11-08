@@ -37,7 +37,7 @@ abstract class AdminPageController
         return false;
     }
 
-    protected function positiveInteger(mixed $value): ?int
+    protected function positiveInteger($value): ?int
     {
         if (!is_string($value) && !is_int($value)) {
             return null;

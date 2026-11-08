@@ -189,7 +189,7 @@ class ScreeningsAdminController extends AdminPageController
         }
     }
 
-    private function getPostedPrices(mixed $postedPrices): array
+    private function getPostedPrices($postedPrices): array
     {
         if (!is_array($postedPrices)) {
             return [];

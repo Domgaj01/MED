@@ -29,8 +29,8 @@
                 <ul class="space-y-3 text-sm text-[#a6a6a6]">
                     <li><a class="transition-colors hover:text-background" href="./index.php">Home</a></li>
                     <li><a class="transition-colors hover:text-background" href="./movies.php">Movies</a></li>
-                    <li><a class="transition-colors hover:text-background" href="./mystery-cinema.php">Mystery Cinema</a></li>
-                    <li><a class="transition-colors hover:text-background" href="./food-and-drinks.php">Food &amp; Drinks</a></li>
+                    <li><a class="transition-colors hover:text-background" href="./mystery.php">Mystery Cinema</a></li>
+                    <li><a class="transition-colors hover:text-background" href="./foods.php">Food &amp; Drinks</a></li>
                     <li><a class="transition-colors hover:text-background" href="./about.php">About</a></li>
                 </ul>
             </nav>

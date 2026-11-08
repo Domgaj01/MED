@@ -99,7 +99,7 @@ class SiteContentAdminController extends AdminPageController
         }
     }
 
-    private function getPostedOpeningHours(mixed $postedHours): ?array
+    private function getPostedOpeningHours($postedHours): ?array
     {
         if (!is_array($postedHours)) {
             return null;
