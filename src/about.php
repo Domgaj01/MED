@@ -10,7 +10,7 @@ include __DIR__ . '/header.php';
 <main>
 
     <!-- HERO SECTION -->
-    <section class="relative isolate flex min-h-[calc(100svh-68px)] items-center justify-center overflow-hidden bg-night px-5 py-14 text-center max-[480px]:px-4 max-[480px]:py-12">
+    <section class="relative isolate flex min-h-[560px] items-center justify-center overflow-hidden bg-night px-5 py-10 text-center max-[480px]:min-h-[480px] max-[480px]:px-4">
 
         <div class="relative z-10 mx-auto flex w-full max-w-[850px] flex-col items-center">
 
@@ -137,6 +137,75 @@ include __DIR__ . '/header.php';
     </section>
 
 
+    <!-- CONTACT FORM SECTION -->
+    <section id="contact" class="bg-[#141414] px-6 py-16">
+
+        <div class="mx-auto max-w-[620px]">
+
+            <div class="mb-9 text-center">
+                <p class="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-accent">
+                    Get in touch
+                </p>
+
+                <h2 class="text-3xl font-black uppercase text-background max-[480px]:text-2xl">
+                    We'd love to hear from you.
+                </h2>
+
+                <p class="mt-4 text-sm leading-relaxed text-[#dedada]">
+                    Have a question about Mystery Cinema? Send us a message!
+                </p>
+            </div>
+
+            <form action="contact.php" method="POST" class="space-y-4">
+
+                <div>
+                    <label for="name" class="mb-2 block text-sm font-semibold text-background">
+                        Your name
+                    </label>
+                    <input type="text" id="name" name="name" required
+                        placeholder="Enter your name"
+                        class="w-full rounded-xl border border-white/10 bg-[#1c1c1c] px-4 py-3 text-sm text-white outline-none focus:border-accent">
+                </div>
+
+                <div>
+                    <label for="email" class="mb-2 block text-sm font-semibold text-background">
+                        Email address
+                    </label>
+                    <input type="email" id="email" name="email" required
+                        placeholder="Enter your email"
+                        class="w-full rounded-xl border border-white/10 bg-[#1c1c1c] px-4 py-3 text-sm text-white outline-none focus:border-accent">
+                </div>
+
+                <div>
+                    <label for="subject" class="mb-2 block text-sm font-semibold text-background">
+                        Subject
+                    </label>
+                    <input type="text" id="subject" name="subject" required
+                        placeholder="What is your message about?"
+                        class="w-full rounded-xl border border-white/10 bg-[#1c1c1c] px-4 py-3 text-sm text-white outline-none focus:border-accent">
+                </div>
+
+                <div>
+                    <label for="message" class="mb-2 block text-sm font-semibold text-background">
+                        Your message
+                    </label>
+                    <textarea id="message" name="message" rows="4" required
+                        placeholder="Write your message here..."
+                        class="w-full rounded-xl border border-white/10 bg-[#1c1c1c] px-4 py-3 text-sm text-white outline-none focus:border-accent"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full rounded-xl bg-accent px-8 py-3.5 text-sm font-bold text-white transition-colors hover:bg-accent-dark">
+                    Send message
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
     <!-- CALL TO ACTION -->
     <section class="bg-night px-6 py-28 text-center">
 
@@ -162,6 +231,7 @@ include __DIR__ . '/header.php';
         </div>
 
     </section>
+
 
 </main>
 
